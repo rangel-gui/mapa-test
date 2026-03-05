@@ -2,7 +2,6 @@ import { useRef, useEffect, useCallback } from 'react';
 import type { Point } from '../types';
 
 const OUTER_R = 52;        // outer pad radius px
-const KNOB_R = 22;         // knob radius px
 const MAX_SPEED = 1.4;     // m/s at full deflection (normal walking pace)
 const DEAD_ZONE = 0.06;    // ignore tiny inputs
 
