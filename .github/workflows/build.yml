@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   web:
     name: Web (tsc + vite)
@@ -53,6 +56,37 @@ jobs:
           name: app-debug.apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 14
+
+  pages:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: web
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci && npm run build
+
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy
+        id: deploy
+        uses: actions/deploy-pages@v4
 
   ios:
     name: iOS simulator build
