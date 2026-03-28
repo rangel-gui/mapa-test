@@ -13,6 +13,8 @@ interface Props {
   statusText: string;
   onMapClick?: (point: Point) => void;
   children?: ReactNode;
+  isActive: boolean;
+  navOffset?: boolean;
 }
 
 function MapClickHandler({ onClick }: { onClick: (point: Point) => void }) {
@@ -37,6 +39,8 @@ export function MapView({
   statusText,
   onMapClick,
   children,
+  isActive,
+  navOffset,
 }: Props) {
   const mapRef = useRef<LeafletMap | null>(null);
   const hasFlewRef = useRef(false);
@@ -56,7 +60,7 @@ export function MapView({
   }, [position]);
 
   return (
-    <div className="relative w-screen h-screen">
+    <div className={`relative w-screen h-screen ${!isActive ? 'invisible pointer-events-none' : ''}`}>
       <MapContainer
         center={[0, 0]}
         zoom={2}
@@ -75,7 +79,7 @@ export function MapView({
       {/* Status bar */}
       <div
         className={`
-          absolute bottom-5 left-1/2 -translate-x-1/2 z-[2000]
+          absolute ${navOffset ? 'bottom-[84px]' : 'bottom-5'} left-1/2 -translate-x-1/2 z-[2000]
           text-white px-4 py-1.5 rounded-full text-[13px]
           pointer-events-none whitespace-nowrap transition-colors duration-200
           ${onMapClick ? 'bg-green-900/85' : 'bg-black/75'}

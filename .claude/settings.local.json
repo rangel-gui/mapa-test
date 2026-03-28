@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:contribution.usercontent.google.com)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}
